@@ -19,16 +19,26 @@
     width: 631.5px;
 }
 
+body {
+ margin: 0;
+}
+
 #doodle-container {
     position:relative;
     cursor: none;
     height: 251.5px;
     width: 631.5px;
     overflow: hidden;
+    padding-top: 100px;
+    padding-left: 100px;
+    padding-right: 50px;
+    padding: 100px 50px 50px 100px;
 }
 
 #doodle-container > #big-doodle-container-mid{
     position: fixed;
+    top: 0;
+    left: 0;
     z-index: 3;
     background-color: white;
 
@@ -49,13 +59,15 @@
 }
 
 
-#doodle-container > #big-doodle-container-mid > img, #big-doodle-container-top > img ,
-#big-doodle-container-bottom > img{
+#doodle-container > #big-doodle-container-mid > img {
     position: absolute;
 }
 
 .overlay {
     position: absolute;
+    top: 0px;
+    left: 0px;
+    box-sizing: border-box;
     z-index: 5;
     opacity: 0;
     height: 100%;
