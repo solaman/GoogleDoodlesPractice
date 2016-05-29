@@ -1,9 +1,7 @@
 /**
  * Created by Solaman on 5/26/2016.
  */
-var reverseDoodleIndex = ['childrensday11-hp.png', 'flower.jpg', 'marionettes.png', 'wrench.jpg'];
-
-var doodleImageNames = ['childrensday11-hp.png', 'flower.jpg', 'marionettes.png', 'wrench.jpg'];
+var doodleNames = ['childrensday11-hp.png', 'flower.jpg', 'marionettes.png', 'wrench.jpg', 'worldFair.html'];
 
 var doodleContainerElement = document.getElementById("doodle-container");
 
@@ -11,10 +9,18 @@ var doodleContainerElement = document.getElementById("doodle-container");
     var currentDoodleIndex = 0;
     var doodleURL = "resources/images/";
     var doodleImageElement = doodleContainerElement.getElementsByClassName("displayed-doodle")[0];
+    var doodleIFrameElement = document.createElement("iframe");
+    doodleIFrameElement.classList.add("displayed-doodle");
+
+    var swappingDoodle = doodleImageElement;
+
     var swapFrom = 0;
     doodleImageElement.addEventListener("load", function() {
        this.style["top"] = (150 - this.height/2) + "px";
        doodleEnter(swapFrom);
+    });
+    doodleIFrameElement.addEventListener("load", function() {
+        doodleEnter(swapFrom);
     });
 
     var prevLink = doodleContainerElement.getElementsByClassName("prev-doodle")[0];
@@ -25,7 +31,7 @@ var doodleContainerElement = document.getElementById("doodle-container");
             return;
         }
         resetDoodlePosition();
-        var distanceToStart = (doodleImageElement.width + doodleContainerElement.clientWidth)/2;
+        var distanceToStart = (swappingDoodle.width + swappingDoodle.clientWidth)/2;
         var numberOfFrames = 60;
         var horizontalPositionFrameDelta = distanceToStart/numberOfFrames;
         var horizontalPositionProperty = null;
@@ -35,31 +41,31 @@ var doodleContainerElement = document.getElementById("doodle-container");
             horizontalPositionProperty = "left";
         }
 
-        doodleImageElement.style[horizontalPositionProperty] = distanceToStart + "px";
-        doodleImageElement.style["opacity"] = 1;
+        swappingDoodle.style[horizontalPositionProperty] = distanceToStart + "px";
+        swappingDoodle.style["opacity"] = 1;
         var interval = setInterval(doodleEnteringAnimation, 5);
         var distanceFromStart = distanceToStart;
         function doodleEnteringAnimation() {
             if(distanceFromStart <= 0) {
-                doodleImageElement.style[horizontalPositionProperty] = 0 + "px";
+                swappingDoodle.style[horizontalPositionProperty] = 0 + "px";
                 clearInterval(interval);
                 prevLink.classList.remove("disabled");
                 nextLink.classList.remove("disabled");
             } else {
                 distanceFromStart -= horizontalPositionFrameDelta;
-                doodleImageElement.style[horizontalPositionProperty] = distanceFromStart + "px";
+                swappingDoodle.style[horizontalPositionProperty] = distanceFromStart + "px";
             }
         }
     };
 
     function resetDoodlePosition() {
-        doodleImageElement.style["left"] = null;
-        doodleImageElement.style["right"] = null;
+        swappingDoodle.style["left"] = null;
+        swappingDoodle.style["right"] = null;
     }
 
     var doodleExit = function(pageDelta){
         resetDoodlePosition();
-        var distanceToCover = (doodleImageElement.width + doodleContainerElement.clientWidth)/2;
+        var distanceToCover = (swappingDoodle.width + doodleContainerElement.clientWidth)/2;
         var numberOfFrames = 60;
         var horizontalPositionFrameDelta = distanceToCover/numberOfFrames;
         var horizontalPositionProperty = null;
@@ -78,16 +84,30 @@ var doodleContainerElement = document.getElementById("doodle-container");
                 swapDoodles(pageDelta);
             } else {
                 coveredDistance += horizontalPositionFrameDelta;
-                doodleImageElement.style[horizontalPositionProperty] = coveredDistance + "px";
+                swappingDoodle.style[horizontalPositionProperty] = coveredDistance + "px";
             }
         }
     };
 
     var swapDoodles = function(pageDelta) {
-        currentDoodleIndex = ((currentDoodleIndex + pageDelta) % doodleImageNames.length + doodleImageNames.length ) % doodleImageNames.length;
-        doodleImageElement.style["opacity"] = 0;
+        if(doodleNames[currentDoodleIndex] === 'worldFair.html') {
+            doodleContainerElement.removeChild(doodleIFrameElement);
+            doodleContainerElement.appendChild(doodleImageElement);
+            swappingDoodle = doodleImageElement;
+        }
+
+        currentDoodleIndex = ((currentDoodleIndex + pageDelta) % doodleNames.length + doodleNames.length ) % doodleNames.length;
+        swappingDoodle.style["opacity"] = 0;
         swapFrom = pageDelta;
-        doodleImageElement.setAttribute("src", doodleURL + doodleImageNames[currentDoodleIndex]);
+        if( doodleNames[currentDoodleIndex] === 'worldFair.html') {
+            doodleContainerElement.removeChild(doodleImageElement);
+            doodleContainerElement.appendChild(doodleIFrameElement);
+            swappingDoodle = doodleIFrameElement;
+            doodleIFrameElement.setAttribute("src", doodleNames[currentDoodleIndex] );
+
+        } else {
+            doodleImageElement.setAttribute("src", doodleURL + doodleNames[currentDoodleIndex]);
+        }
     };
 
     prevLink.addEventListener("click", function() {

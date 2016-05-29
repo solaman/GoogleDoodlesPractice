@@ -1,6 +1,7 @@
 /**
  * Created by Solaman on 5/28/2016.
  */
+ var PADDING = 10;
 (function() {
    var doodleContainerElement = document.getElementById("doodle-container").getElementsByClassName("overlay")[0];
    var lookingGlassElement = document.getElementById("looking-glass");
@@ -20,17 +21,19 @@
    }
 
    function moveMagnifiedDoodle(event) {
-       var x = event.clientX - 100;
-       var y = event.clientY - 100;
+       var x = event.clientX;
+       var y = event.clientY;
 
-       var fixedDeltaX = (x)*doodleRatioWidth/2;
-       var fixedDeltaY = (y)*doodleRatioHeight/2;
+       var fixedDeltaX = (x-PADDING)*doodleRatioWidth/2;
+       var fixedDeltaY = (y-PADDING)*doodleRatioHeight/2;
 
-       bigDoodleContainerElement.style["top"] = y + 2 + "px";
-       bigDoodleContainerElement.style["left"] = x + 2 + "px";
+       var lookingGlassX = (x - 100);
+       var lookingGlassY = (y - 100);
+       bigDoodleContainerElement.style["top"] = lookingGlassY + 2 + "px";
+       bigDoodleContainerElement.style["left"] = lookingGlassX + 2 + "px";
 
-       bigDoodleElement.style["top"] = 100 - y - fixedDeltaY + "px";//-(y-100) +(deltaY + 100) + "px";
-       bigDoodleElement.style["left"] = 100 - x - fixedDeltaX + "px";
+       bigDoodleElement.style["top"] = PADDING - lookingGlassY - fixedDeltaY + "px";
+       bigDoodleElement.style["left"] = PADDING - lookingGlassX - fixedDeltaX + "px";
 
    }
 

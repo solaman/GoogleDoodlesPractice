@@ -29,10 +29,7 @@ body {
     height: 251.5px;
     width: 631.5px;
     overflow: hidden;
-    padding-top: 100px;
-    padding-left: 100px;
-    padding-right: 50px;
-    padding: 100px 50px 50px 100px;
+    padding: 10px 5px 5px 10px;
 }
 
 #doodle-container > #big-doodle-container-mid{

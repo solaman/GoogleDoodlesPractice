@@ -28,8 +28,14 @@ section#doodle-container {
 section#doodle-container .displayed-doodle {
     /*prolly gonna adjust this on a per image basis*/
     position: relative;
-    top: 63.5px;
+    padding-top: 20px;
+}
 
+iframe.displayed-doodle {
+ height: 500px;
+ width: 700px;
+ scroll: none;
+ border: none;
 }
 
 section#doodle-container .prev-doodle, .next-doodle {
